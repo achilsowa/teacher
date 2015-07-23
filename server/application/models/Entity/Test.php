@@ -1,0 +1,286 @@
+<?php
+
+ namespace Entity;
+
+
+ /**
+  * @Table()
+  *
+  * @Entity()
+  */
+ class Test
+ {
+
+   /**
+    * @var integer $id
+    *
+    * @Column(name="id", type="integer")
+    * @Id
+    * @GeneratedValue(strategy="AUTO")
+    */
+   protected $id;
+
+    /**
+     * @ManyToOne(targetEntity="Entity\Classroom")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected $classroom;
+
+    /**
+     * @ManyToOne(targetEntity="Entity\Teacher")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected $resp;
+
+
+   /**
+    * @var string $code
+    *
+    * @Column(name="code", type="string", length=25, nullable=true)
+    */
+   protected $code;
+
+   /**
+    * @var integer $seq
+    *
+    * @Column(name="seq", type="integer", nullable=true)
+    */
+   protected $seq;
+
+   /**
+    * @var integer $percent
+    *
+    * @Column(name="percent", type="integer", nullable=true)
+    */
+   protected $percent;
+
+   /**
+    * @var string $subject
+    *
+    * @Column(name="subject", type="string", length=50, nullable=true)
+    */
+   protected $subject;
+   
+   /**
+    * @var datetime $creation
+    *
+    * @Column(name="creation", type="datetime", nullable=true)
+    */
+   protected $creation;
+
+     /**
+      * @var string $files
+      *
+      * @Column(name="files", type="string", length=255, nullable=true)
+      */
+     protected $files;
+
+   /**
+    * @var date date
+    * 
+    * @Column(name="date", type="date", nullable=true)
+    */
+   protected $date;
+
+   public function __construct() {
+     $this->creation = new \Datetime();
+   }
+
+  /**
+   * Get id
+   *
+   * @return integer 
+   */
+  public function getId()
+  {
+    return $this->id;
+  }
+
+  /**
+   * Set seq
+   *
+   * @param integer $seq
+   */
+  public function setSeq($seq)
+  {
+    $this->seq = $seq;
+  }
+  
+  /**
+   * Get seq
+   *
+   * @return integer 
+   */
+  public function getSeq()
+  {
+    return $this->seq;
+  }
+  
+  /**
+   * Set code
+   *
+   * @param string $code
+   */
+  public function setCode($code)
+  {
+    $this->code = $code;
+  }
+  
+  /**
+   * Get code
+   *
+   * @return string 
+   */
+  public function getCode()
+  {
+    return $this->code;
+  }
+  
+  /**
+   * Set creation
+   *
+   * @param datetime $creation
+   */
+  public function setCreation($creation)
+  {
+    $this->creation = $creation;
+  }
+
+  /**
+   * Get creation
+   *
+   * @return datetime 
+   */
+  public function getCreation()
+  {
+    return $this->creation;
+  }
+
+  /**
+   * Set date
+   *
+   * @param date $date
+   */
+  public function setDate($date)
+  {
+    if (!$date) return;
+    try {
+      $this->date = new \Datetime($date);
+    }catch(Exception $e) {
+      
+    }
+  }
+
+  /**
+   * Get date
+   *
+   * @return date 
+   */
+  public function getDate()
+  {
+    return $this->date;
+  }
+
+  /**
+   * Set percent
+   *
+   * @param percent $percent
+   */
+  public function setPercent($percent)
+  {
+    $this->percent = $percent;
+  }
+
+  /**
+   * Get percent
+   *
+   * @return percent 
+   */
+  public function getPercent()
+  {
+    return $this->percent;
+  }
+
+  /**
+   * Set subject
+   *
+   * @param subject $subject
+   */
+  public function setSubject($subject)
+  {
+    $this->subject = $subject;
+  }
+
+  /**
+   * Get subject
+   *
+   * @return subject 
+   */
+  public function getSubject()
+  {
+    return $this->subject;
+  }
+
+  public function setClassroom(\Entity\Classroom $classroom)
+  {
+    $this->classroom = $classroom;
+  }
+
+  /**
+   * Get classroom
+   *
+   * @return Entity\Classroom 
+   */
+  public function getClassroom()
+  {
+    return $this->classroom;
+  }
+
+  /**
+   * Set resp
+   *
+   * @param Entity\Teacher $resp
+   */
+  public function setResp(\Entity\Teacher $resp)
+  {
+    $this->resp = $resp;
+  }
+  
+  /**
+   * Get resp
+   *
+   * @return Entity\Teacher 
+   */
+  public function getResp()
+  {
+    return $this->resp;
+  }
+  
+  public function cannotBeEditedBy(&$teacher) {
+    if (!$this->resp) $this->resp = $this->getResp();
+    return $teacher->getId() != $this->resp->getId();
+  }
+
+     /**
+      * Add file
+      *
+      * @param string $file
+      */
+     public function addFile($file)
+     {
+         if (preg_match('#'.$file.'#i', $this->files))
+             return;
+         if (!empty($this->files)) $this->files .= '$';
+         $this->files .= $file;
+     }
+
+     /**
+      * Get files
+      *
+      * @return string
+      */
+     public function getFiles()
+     {
+         return $this->files;
+     }
+ }

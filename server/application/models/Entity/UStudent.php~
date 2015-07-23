@@ -1,0 +1,13 @@
+<?php
+
+namespace Entity;
+
+
+/**
+ * @Entity
+ * Entity\UStudent
+ * @Table()
+ */
+class UStudent extends \Entity\Member
+{
+}

@@ -1,0 +1,19 @@
+<?php
+namespace Entity;
+use Doctrine\ORM\EntityRepository;
+/**
+ * ClassroomRepository
+ */
+
+class ClassroomRepository extends EntityRepository{
+
+  public function getStudents($clid) {
+    $query = $this->_em->createQuery('SELECT s.id, s.name, s.phone, s.sexe, '.
+				     's.birth, s.img, s.email FROM '.
+				     'Entity\Student s JOIN s.classroom c '.
+				     'WHERE c.id = :cid');
+    $query->setParameter('cid', $clid);
+    return $query->getResult();
+  }
+
+}

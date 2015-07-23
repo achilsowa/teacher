@@ -1,0 +1,458 @@
+<?php
+
+namespace Entity;
+
+/**
+ * Member Model
+ * @Entity(repositoryClass="Entity\MemberRepository")
+ * @Table()
+
+ * @InheritanceType("SINGLE_TABLE")
+ * @DiscriminatorColumn(name="type", type="integer")
+ * @DiscriminatorMap({0="Member", 1="UStudent", 2="Teacher"})
+ */
+class Member
+
+{
+  /**
+   * 
+   * @var integer $id
+   *
+   * @Id
+   * @Column(name="id", type="integer")
+   * @GeneratedValue(strategy="AUTO")
+   */
+  protected $id;
+
+  /**
+   * @var smallint $active
+   *
+   * @Column(name="active", type="smallint")
+   */
+  protected $active;
+  
+  /**
+   * @var string $name
+   *
+   * @Column(name="name", type="string", length=255)
+   */
+  protected $name;
+
+  /**
+   * @var string $town
+   *
+   * @Column(name="town", type="string", length=255, nullable=true)
+   */
+  protected $town;
+
+  /**
+   * @var string $country
+   *
+   * @Column(name="country", type="string", length=255, nullable=true)
+   */
+  protected $country;
+  
+  /**
+   * @var string $pwd
+   *
+   * @Column(name="pwd", type="string", length=255)
+   */
+  protected $pwd;
+  
+  /**
+   * @var string $matricule
+   *
+   * @Column(name="matricule", type="string", length=255, nullable=true)
+   */
+  protected $matricule;
+
+  /**
+   * @var string $email
+   *
+   * @Column(name="email",type="string",length=255, nullable=true, unique=true)
+   */
+  protected $email;
+
+
+    /**
+     * @var string $email
+     *
+     * @Column(name="username",type="string",length=255, nullable=true, unique=true)
+     */
+    protected $username;
+
+
+    /**
+   * @var string $phone
+   *
+   * @Column(name="phone", type="string", length=255, nullable=true)
+   */
+  protected $phone;
+
+  /**
+   * @var string $schools
+   *
+   * @Column(name="schools", type="string", length=255, nullable=true)
+   */
+  protected $schools;
+  
+  /**
+   * @var smallint $sexe
+   *
+   * @Column(name="sexe", type="smallint", nullable=true)
+   */
+  protected $sexe;
+
+  /**
+   * @var datetime $birth
+   *
+   * @Column(name="birth", type="datetime", nullable=true)
+   */
+  protected $birth;
+
+  /**
+   * @var datetime $creation
+   *
+   * @Column(name="creation", type="datetime", nullable=true)
+   */
+  protected $creation;
+  
+  /**
+   * @var string $img
+   *
+   * @Column(name="image", type="string", length = 255, nullable=true)
+   */
+  protected $img;
+  
+
+  public function __construct() 
+  {
+    $this->creation = new \Datetime();
+    $this->town = 'yaounde';
+    $this->country = 'cameroon';
+    $this->img = 'imgs/avatar-default.png';
+    $this->active = 1;
+  }
+
+  
+  /**
+   * Get id
+   *
+   * @return integer 
+   */
+  public function getId()
+  {
+    return $this->id;
+  }
+  
+  /**
+   * Set name
+   *
+   * @param string $name
+   */
+  public function setName($name)
+  {
+    $this->name = $name;
+  }
+  
+  /**
+   * Get name
+   *
+   * @return string 
+   */
+  public function getName()
+  {
+    return $this->name;
+  }
+
+  /**
+   * Set town
+   *
+   * @param string $town
+   */
+  public function setTown($town)
+  {
+    $this->town = $town;
+  }
+  
+  /**
+   * Get town
+   *
+   * @return string 
+   */
+  public function getTown()
+  {
+    return $this->town;
+  }
+
+  /**
+   * Set country
+   *
+   * @param string $country
+   */
+  public function setCountry($country)
+  {
+    $this->country = $country;
+  }
+  
+  /**
+   * Get country
+   *
+   * @return string 
+   */
+  public function getCountry()
+  {
+    return $this->country;
+  }
+
+  /**
+   * Set pwd
+   *
+   * @param string $pwd
+   */
+  public function setPwd($pwd, $hash = false)
+  {
+    if ($hash) $this->pwd = sha1(sha1($pwd.'cool'));
+    else $this->pwd = $pwd;
+  }
+
+  /**
+   * Get pwd
+   *
+   * @return string 
+   */
+  public function getPwd()
+  {
+    return $this->pwd;
+  }
+
+  /**
+   * Set matricule
+   *
+   * @param string $matricule
+   */
+  public function setMatricule($matricule)
+  {
+    $this->matricule = $matricule;
+  }
+
+  /**
+   * Get matricule
+   *
+   * @return string 
+   */
+  public function getMatricule()
+  {
+    return $this->matricule;
+  }
+
+  /**
+   * Set email
+   *
+   * @param string $email
+   */
+  public function setEmail($email)
+  {
+    $this->email = $email;
+  }
+
+  /**
+   * Get email
+   *
+   * @return string 
+   */
+  public function getEmail()
+  {
+    return $this->email;
+  }
+
+
+    /**
+     * Set username
+     *
+     * @param string $username
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    }
+
+    /**
+     * Get username
+     *
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+
+    /**
+   * Set phone
+   *
+   * @param string $phone
+   */
+  public function setPhone($phone)
+  {
+    $this->phone = $phone;
+  }
+
+  /**
+   * Get phone
+   *
+   * @return string 
+   */
+  public function getPhone()
+  {
+    return $this->phone;
+  }
+
+
+  /**
+   * Add school
+   *
+   * @param string $school
+   */
+  public function addSchool($school)
+  {
+    if (preg_match('#'.$school.'#i', $this->schools))
+      return;
+    if (!empty($this->schools)) $this->schools .= '$';
+    $this->schools .= $school;
+  }
+
+  /**
+   * Get schools
+   *
+   * @return string 
+   */
+  public function getSchools()
+  {
+    return $this->schools;
+  }
+
+  /**
+   * Set sexe
+   *
+   * @param smallint $sexe
+   */
+  public function setSexe($sexe)
+  {
+    $this->sexe = $sexe;
+  }
+
+  /**
+   * Get sexe
+   *
+   * @return smallint 
+   */
+  public function getSexe()
+  {
+    return $this->sexe;
+  }
+
+
+  /**
+   * Set active
+   *
+   * @param smallint $active
+   */
+  public function setActive($active)
+  {
+    $this->active = $active;
+  }
+
+  /**
+   * Get active
+   *
+   * @return smallint 
+   */
+  public function getActive()
+  {
+    return $this->active;
+  }
+
+  /**
+   * Set birth
+   *
+   * @param datetime $birth
+   */
+  public function setbirth($birth)
+  {
+    $this->birth = $birth;
+  }
+
+  /**
+   * Get birth
+   *
+   * @return datetime 
+   */
+  public function getBirth()
+  {
+    return $this->birth;
+  }
+
+  /**
+   * Set creation
+   *
+   * @param datetime $creation
+   */
+  public function setCreation($creation)
+  {
+    $this->creation = $creation;
+  }
+
+  /**
+   * Get creation
+   *
+   * @return datetime 
+   */
+  public function getCreation()
+  {
+    return $this->creation;
+  }
+
+  /**
+   * Set img
+   *
+   * @param string $img
+   */
+  public function setImg($img = null)
+  {
+      if ($img == null) {
+          $content = strtoupper($this->name);
+          $content = explode(' ', $content);
+          if (count($content) == 0) return;
+          if (count($content) > 1) $img = $content[0][0].$content[1][0];
+          else $img = $content[0][0];
+
+          $pos = 8*strlen($img)/2;
+          $img_s = imagecreate(25,25);
+
+          $grey = imagecolorallocate($img_s, 241, 241, 241);
+          $black = imagecolorallocate($img_s, 0, 0, 0);
+
+
+          imagejpeg($img_s, '../app/imgs/'.$img.'.jpg');
+          imagestring($img_s, 5, 12.5-$pos, 5, $img, $black);
+          imagejpeg($img_s, '../app/imgs/'.$img.'.jpg');
+          $this->img = 'imgs/'.$img.'.jpg';
+          return;
+      }
+      $this->img = 'imgs/'.$img;
+
+  }
+
+  /**
+   * Get img
+   *
+   * @return string 
+   */
+  public function getImg()
+  {
+    return $this->img;
+  }
+}
+
+/*CREATE  INDEX ft_person_email USING BTREE ON Person(email);*/

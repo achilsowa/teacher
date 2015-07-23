@@ -1,0 +1,92 @@
+<?php
+
+class Register extends CI_Controller {
+  
+  private $base;
+  public $em;
+  public function __construct() {
+    parent::__construct();
+    $this->load->library('doctrine');
+    $this->em = $this->doctrine->em;
+    $this->load->library('session');
+  }
+
+  function signin() {
+    $data['base'] = $this->config->item('base_url');
+
+    if (empty($_POST['email']) || empty($_POST['password'])) {
+      $error = 'email and password are mandatory';
+      header('Location: '.$data['base'].'login.php?error='.$error);
+      return;
+    }
+    
+    $email = $_POST['email'];
+    $pwd = $_POST['password'];
+    
+    $user = $this->em->getRepository('Entity\Member')->
+      findOneBy(array('email'=>$email));
+      if ($user === null)
+	{
+	    $error = 'incorrect email';
+        header('Location: '.$data['base'].'login.php?error='.$error);
+	    return;
+	}
+    
+      if ($user->getPwd() != $pwd)
+	{
+	    $error = 'incorrect pwd';
+        header('Location: '.$data['base'].'login.php?error='.$error);
+	    return;
+	}
+      $this->session->set_userdata('user-id', $user->getId());
+      header('Location: '.$data['base'].'app/');
+      return;
+  }
+
+  function signup() {
+    $data['base'] = $this->config->item('base_url');
+
+    if (empty($_POST['email']) || empty($_POST['password'])) {
+      $error = 'email and password are mandatory';
+      header('Location: '.$data['base'].'register.php?error='.$error);
+      return;
+    }
+    
+    $pwd = $_POST['password'];
+    $email = $_POST['email'];
+    $name = empty($_POST['name']) ? 'unknown' : $_POST['name'];
+
+    $teacher = $this->em->getRepository('Entity\Member')->
+      findOneBy(array('email'=>$email));
+    if ($teacher != null) {
+        $error = $email.' is already used! <br/>Please choose another';
+        header('Location: '.$data['base'].'register.php?error='.$error);
+        return;
+    }
+    $teacher = new \Entity\Teacher();
+    $teacher->setPwd($pwd);
+
+    $teacher->setEmail($email);
+    $teacher->setName($name);
+    try {
+        $this->em->persist($teacher);
+        $this->em->flush();
+        $this->session->set_userdata('user-id', $teacher->getId());
+
+        $jid = str_replace('@', '_', $teacher->getEmail());
+
+        $this->session->set_userdata('first', '1');
+        header('Location: '.$data['base'].'app/');
+        return;
+    } catch(Exception $e) {
+        $error = 'an internal error has occured. please try later';
+        header('Location: '.$data['base'].'register.php?error='.$error);
+    }
+  }
+
+  function signout() {
+    $data['base'] = $this->config->item('base_url');
+    $this->session->sess_destroy();
+    header('Location: '.$data['base'].'login.php');
+  }
+}
