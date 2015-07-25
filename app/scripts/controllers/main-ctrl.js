@@ -17,7 +17,11 @@ sukuApp.controller('MainCtrl', ['AuthLoaderService', 'ClassroomModel', 'TestMode
         'Settings': 'Settings',
         'Logout': 'Logout',
 
-        'Uploading file': 'Uploading file'
+        'Uploading file': 'Uploading file',
+
+        'Error' : 'Error',
+        'Unable to reach the server' : 'Unable to reach the server',
+        'All the changes made now may not be saved on the server': 'All the changes made now may not be saved on the server'
     };
 
 
@@ -68,10 +72,7 @@ sukuApp.controller('MainCtrl', ['AuthLoaderService', 'ClassroomModel', 'TestMode
 
     var initServerFileCtrl = function () {
 
-        self.serverFileCtrl = {
-            loading: ServerFile.loading,
-            points: ServerFile.points
-        };
+        self.serverFileCtrl = ServerFile.status;
         console.log(self.serverFileCtrl);
     };
 

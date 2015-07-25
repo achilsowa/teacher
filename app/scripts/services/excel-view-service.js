@@ -3,7 +3,7 @@
  */
 
 
-sukuApp.factory('ExcelViewService', ['Helper', 'ExcelColumnViewService', 'ChartViewService', function (Helper, Column, ChartDialog){
+sukuApp.factory('ExcelViewService', ['Helper', 'ExcelColumnViewService', 'ChartViewService', '$rootScope', function (Helper, Column, ChartDialog, $rootScope){
 
     var Views = [];
 
@@ -170,7 +170,7 @@ sukuApp.factory('ExcelViewService', ['Helper', 'ExcelColumnViewService', 'ChartV
                     }
                 }
             };
-
+            this.state = {is_rendering : true};
             this.headers = args['headers'];
 
             this.el = args['el'];
@@ -215,15 +215,13 @@ sukuApp.factory('ExcelViewService', ['Helper', 'ExcelColumnViewService', 'ChartV
 
                     autoWrapRow: true,
                     minSpareRows: 0,
-                    'afterRender': function (isForced) {
-                        //console.log('after render : '+isForced);
-                    },
                     manualRowResize: true,
                     manualColumnResize: true,
                     height:height,/*
                      manualColumnMove: true,
                      contextMenu: true,*/
                     'beforeKeyDown': this.proxy(this.before_key_down),
+                    'beforeRender': this.proxy(this.before_render),
                     'afterRender': this.proxy(this.after_render),
                     'afterChange': this.proxy(this.after_change),
                     'beforeChange': this.proxy(this.before_change),
@@ -404,9 +402,14 @@ sukuApp.factory('ExcelViewService', ['Helper', 'ExcelColumnViewService', 'ChartV
         },
 
         after_render: function (isForced) {
+
             if (!this.selected) return;
             for (var i = 0; i < this.selected.length; ++i)
                 this.select_area(this.selected[i]);
+        },
+
+        before_render: function (isForced) {
+            console.log(this.state.is_rendering);
         },
 
         after_selection_end: function (row1, col1, row2, col2) {
@@ -487,7 +490,11 @@ sukuApp.factory('ExcelViewService', ['Helper', 'ExcelColumnViewService', 'ChartV
         },
 
         addAll: function () {
-            console.log(this.columns.length);
+            console.time('addll');
+            this.el.find('[loading-gif]').css('display', 'block');
+            this.hot_table.css('display', 'none');
+            this.state.is_rendering = true;
+            console.log(this.columns);
             for (var col = 0; col < this.columns.length; ++col){
                 //console.log(this.columns[col].items);
                 for (var row = 0; row < this.columns[col].items.length; ++row){
@@ -496,6 +503,12 @@ sukuApp.factory('ExcelViewService', ['Helper', 'ExcelColumnViewService', 'ChartV
                 }
             }
             this.hot.clearUndo();
+
+            this.state.is_rendering = false;
+            this.hot_table.css('display', 'block');
+            this.hot.render();
+            this.el.find('[loading-gif]').css('display', 'none');
+            console.timeEnd('addll');
         },
 
         data: function (i, j) {
@@ -507,6 +520,7 @@ sukuApp.factory('ExcelViewService', ['Helper', 'ExcelColumnViewService', 'ChartV
         },
 
         addOne: function (item, row, col) {
+
             if (col == undefined) {
                 //this.hot.alter('insert_row');
                 var count = this.hot.countRows() - 1;

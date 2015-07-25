@@ -34,7 +34,8 @@ class App extends CI_Controller {
         $this->load->view('webapp', $data);
     }
 
-    function add_classroom($id = 0) {
+
+    public function add_classroom($id = 0) {
 
         if (!$this->assert_user_defined()) return;
         $postdata = file_get_contents("php://input");
@@ -53,7 +54,6 @@ class App extends CI_Controller {
             $classroom = $this->academy->add_classroom($name, $code, $school);
         }
 
-
         if (is_object($classroom)) {
             $status = 0;
             echo ')]}\'
@@ -65,12 +65,11 @@ class App extends CI_Controller {
         }
     }
 
-    function get_classrooms() {
+    public function get_classrooms() {
         if (!$this->assert_user_defined()) return;
-        $str = '';
         $classrooms = $this->academy->get_classrooms();
         $max=count($classrooms);
-        $str .= '[';
+        $str = '[';
         for($i=0; $i< $max; ++$i) {
             $classroom = $classrooms[$i]->getClassroom();
             if ($classroom == null) continue;
@@ -79,9 +78,10 @@ class App extends CI_Controller {
             $files = $classroom->getFiles();
             if ($files != null) {
                 $files = explode('$', $files);
-                for($i=0, $maxf = count($files); $i<$maxf; ++$i) $files[$i] = '"'.$files[$i].'"';
+                for($j=0, $maxf = count($files); $j<$maxf; ++$j) $files[$j] = '"'.$files[$j].'"';
                 $files = implode(',', $files);
             }
+
             $str .='{"name":"'.$classroom->getName().'",'.
                 '"responsible":"'.$classroom->getResp()->getName().'",'.
                 '"active":"'.$active.'", "files": ['.$files.'], '.
@@ -100,7 +100,7 @@ class App extends CI_Controller {
         return;
     }
 
-    function get_classroom($id) {
+    public function get_classroom($id) {
         $this->assert_user_defined();
         $str = '';
         $id = $this->cid2sid($id);
@@ -130,7 +130,7 @@ class App extends CI_Controller {
 
     }
 
-    function del_classroom($id) {
+    public function del_classroom($id) {
         $id = $this->cid2sid($id);
 
         $rep = $this->academy->del_classroom($id);
@@ -172,14 +172,15 @@ class App extends CI_Controller {
         $clid = $this->cid2sid($clid);
 
         $rep = $this->academy->add_file_classroom($clid, $file);
-        if ($rep < 1) $status = 0; else $status = 1;
+        if ($rep != 1) $status = 1; else $status = 0;
         echo ')]}\'
             {"status": "'.$status.'", "content": "'.$rep.'" }';
         return;
     }
     /*before adding the student we must check that this teacher has the
       right to add student in that class*/
-    function add_student($clid, $id = 0) {
+
+    public function add_student($clid, $id = 0) {
         if (!$this->assert_user_defined()) return;
         $postdata = file_get_contents("php://input");
         $request = json_decode($postdata);
@@ -198,7 +199,12 @@ class App extends CI_Controller {
         $img = (empty($images_str) ? null : htmlspecialchars($images_str));
 
         $sexe = (int)$sexe;
+        $params = array('name'=>$name, 'email'=>$email, 'sexe'=>$sexe, 'phone'=>$phone, 'img'=>$img,
+                        'classroom_id'=>$this->cid2sid($clid));
 
+        $student = $this->academy->save_student($params, $this->cid2sid($id));
+
+        /*
         if ($id){
             $id = $this->cid2sid($id);
             $student = $this->academy->update_student($name, $email, $phone, $sexe, $img, $id);
@@ -206,7 +212,7 @@ class App extends CI_Controller {
             $clid = $this->cid2sid($clid);
             $student = $this->academy->add_student($name, $email, $phone, $sexe, $img, $clid);
         }
-
+        */
         if (is_object($student)) {
             echo ')]}\'
                 {"status": "0", "content": "'.$this->sid2cid($student->getId()).'" }';
@@ -220,7 +226,7 @@ class App extends CI_Controller {
 
     /*before retrieving the students, must check that the corresponding
       user has the rights to get these information*/
-    function get_students($clid) {
+    public function get_students($clid) {
         /*
           $classroom = $this->user->getClassroom($clid);
           this user has no right on the class
@@ -251,7 +257,7 @@ class App extends CI_Controller {
         echo $str;
     }
 
-    function del_student($id) {
+    public function del_student($id) {
         $id = $this->cid2sid($id);
 
         $rep = $this->academy->del_student($id);
@@ -313,7 +319,7 @@ class App extends CI_Controller {
             $files = $test->getFiles();
             if ($files != null) {
                 $files = explode('$', $files);
-                for($i=0, $maxf = count($files); $i<$maxf; ++$i) $files[$i] = '"'.$files[$i].'"';
+                for($j=0, $maxf = count($files); $j<$maxf; ++$j) $files[$j] = '"'.$files[$j].'"';
                 $files = implode(',', $files);
             }
             $str .='{"code":"'.$test->getCode().'",'.
@@ -390,7 +396,7 @@ class App extends CI_Controller {
 
         $email= htmlspecialchars($email);
 
-        $rep = $this->academy->share_test($tid, $email);
+        $rep = $this->academy->share_test($this->cid2sid($tid), $email);
         if ($rep < 1) $status = 1; else $status = 0;
         echo ')]}\'
             {"status": "'.$status.'", "content": "'.$rep.'" }';
@@ -404,7 +410,7 @@ class App extends CI_Controller {
         $tid = $this->cid2sid($tid);
 
         $rep = $this->academy->add_file_test($tid, $file);
-        if ($rep < 1) $status = 0; else $status = 1;
+        if ($rep != 1) $status = 1; else $status = 0;
         echo ')]}\'
             {"status": "'.$status.'", "content": "'.$rep.'" }';
         return;
@@ -430,9 +436,12 @@ class App extends CI_Controller {
                 {"status": "1", "content": "0" }';
             return;
         }
-        $value = htmlspecialchars($value);
+        $params = array('value'=>$value, 'student_id'=>$this->cid2sid($stdid), 'test_id'=>$this->cid2sid($tid));
 
+        $mark = $this->academy->save_mark($params, $this->cid2sid($id));
         /*we may check that the $id correspond to the test and the student*/
+
+        /*
         if ($id) {
             $id = $this->cid2sid($id);
             $mark = $this->academy->update_mark($value, $id);
@@ -441,6 +450,7 @@ class App extends CI_Controller {
             $stdid = $this->cid2sid($stdid);
             $mark = $this->academy->add_mark($stdid, $value, $tid);
         }
+        */
 
         if (is_object($mark)) {
             echo ')]}\'
@@ -716,7 +726,7 @@ class App extends CI_Controller {
 
 
     private function assert_user_defined($redirect = false) {
-        if (!empty($this->session->userdata('user-id'))) return true;
+        if ($this->session->userdata('user-id')) return true;
         if (!$redirect) return false;
         header('HTTP/1.0 400');
         echo '{"msg":"user session end. please reconnect"}';

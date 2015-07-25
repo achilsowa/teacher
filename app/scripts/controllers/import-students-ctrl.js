@@ -22,7 +22,7 @@ sukuApp.controller('ImportStudentsCtrl', [function (){
         self.dialog.modal();
     };
 
-    self.import = function () {
+    self.import_students = function () {
         self.working = true;
 
         self.classroomCtrl.import_students_from_file(self.paths).then(

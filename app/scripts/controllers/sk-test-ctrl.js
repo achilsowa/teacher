@@ -19,7 +19,7 @@ sukuApp.controller('SKTestCtrl', ['TestModel', 'MarksTestModelFactory', 'Classro
     classroom = ClassroomModel.find_by_sid(classroom.sid);
     self.StudentsModel = StudentsClassroomModelFactory.create(classroom.sid);
 
-    /*
+
     self.StudentsModel.each(function (std) {
         var mark = self.MarksModel.stdids[std.sid];
         if (!mark)
@@ -27,7 +27,7 @@ sukuApp.controller('SKTestCtrl', ['TestModel', 'MarksTestModelFactory', 'Classro
 
         mark.psave();
         console.log(mark);
-    });*/
+    });
 
 
     self.headers = [
@@ -59,7 +59,7 @@ sukuApp.controller('SKTestCtrl', ['TestModel', 'MarksTestModelFactory', 'Classro
             self.propCtrl.setTest(self.test);
             self.propCtrl.openDialog();
         }
-    }
+    };
 
     initShareCtrl();
     initPropertiesCtrl();

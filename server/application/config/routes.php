@@ -42,7 +42,7 @@ $route['404_override'] = '';
 $route['default_controller'] = 'app';
 
 
-$route['classroom'] = 'app/get_classrooms';
+//$route['classroom'] = 'app/get_classrooms';
 
 
 

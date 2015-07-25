@@ -1,7 +1,7 @@
 /**
  * Created by tchapda gabi on 28/05/2015.
  */
-sukuApp.factory('TestModel', ['Model', 'Helper', function(Model, Helper){
+sukuApp.factory('TestModel', ['Model', 'ServerFileModel', 'Helper', 'RegisterService', 'PubSubService', function(Model, ServerFile, Helper, Register, Pubsub){
     var Test = Model.sub();
     Test.configure('Test', //name
         'code', 'date', 'subject', 'classroom', 'responsible', 'files',
@@ -15,6 +15,7 @@ sukuApp.factory('TestModel', ['Model', 'Helper', function(Model, Helper){
             if (what == 'fetch_one') return '../server/get-test';
             if (what == 'share') return '../server/share-test';
             if (what == 'activate') return '../server/activate-test';
+            if (what == 'add-file') return '../server/add-file-test';
         },
 
         sids : [],
@@ -27,6 +28,7 @@ sukuApp.factory('TestModel', ['Model', 'Helper', function(Model, Helper){
         mustHaveNode: true
     });
 
+    Test.include(ServerFile.Helper);
     Test.include({
         share_error: function (code, d, email) {
             if (code == -1) {
@@ -34,7 +36,7 @@ sukuApp.factory('TestModel', ['Model', 'Helper', function(Model, Helper){
             }else if (code == -3){
                 d.reject({what:21, msg: 'You already share this classroom with '+email});
             }else if (code == -2){
-                d.reject({what:22, msg: 'You need to share the classroom '+that.classroom_name+' before you can share this test ', code:code});
+                d.reject({what:22, msg: 'You need to share the classroom ('+this.classroom.name+') before you can share this test ', code:code});
             }else {
                 d.reject({what:23, msg: 'Error while sharing the test', code:code});
             }
@@ -51,7 +53,7 @@ sukuApp.factory('TestModel', ['Model', 'Helper', function(Model, Helper){
             this.subject = Helper.present(this.subject);
             this.classroom_name = Helper.present(this.classroom.name);
 
-            if (!this.responsible) this.responsible = 'stanley';//Gab.user.name;
+            if (!this.responsible) this.responsible = Register.user.name;
             this.responsible = Helper.present(this.responsible);
 
             if (this.id){
@@ -71,5 +73,7 @@ sukuApp.factory('TestModel', ['Model', 'Helper', function(Model, Helper){
     });
     Test.include(Model.NodeHelper.Methods);
     Model.all[Test.Name] = Test;
+
+    Pubsub.conn.addHandler(Model.NodeHelper.newItem,  null, "message", null, null, Pubsub.service);
     return Test;
 }]);

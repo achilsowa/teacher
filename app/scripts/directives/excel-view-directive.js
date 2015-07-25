@@ -31,8 +31,11 @@ sukuApp.directive('excelView', ['ExcelViewService', 'ExcelColumnViewService', fu
 
             $element.attr('id', $scope.viewId);
             this.view = new ExcelView({el: $element, headers:$scope.headers});
+            this.state = $scope.state = this.view.state;
+
+            console.log(this.state);
+            console.log('END');
             this.view.setModel($scope.model);
-            this.loading = $scope.loading = true;
         }
     };
 }]);

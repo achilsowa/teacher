@@ -11,6 +11,7 @@ sukuApp.controller('TestPropertiesCtrl', ['ClassroomModel', 'StudentsClassroomMo
         self.error = null;
         self.loading = true;
 	    self.test = test;
+        self.files = test.files;
         self.olds = test.olds;
         self.comments = test.comments;
 
@@ -105,12 +106,12 @@ sukuApp.controller('TestPropertiesCtrl', ['ClassroomModel', 'StudentsClassroomMo
     };
 
     self.publish = function (comment){
-	    self.working = true;
+        self.working = true;
         var item = {msg: comment};
-	    self.test.publish(item).then(
-	    function(){
+        self.test.publish(item).then(
+            function(){
                 self.working = false;
-
+                self.error = null;
             },
             function (error){
                 console.log(error);
@@ -118,5 +119,21 @@ sukuApp.controller('TestPropertiesCtrl', ['ClassroomModel', 'StudentsClassroomMo
                 self.working = false;
             }
         );
+    };
+
+    self.addFile = function (file) {
+        console.log(self.test);
+        self.test.addFile(file).then(
+            function (rep) {
+                self.working = false;
+                console.log('add file');
+                self.error = null;
+                console.log(file);
+                self.publish('attached a file ('+file.name+')');
+            }, function (error){
+                self.working = false;
+                console.log(error);
+                self.error = error.msg;
+            });
     };
 }]);

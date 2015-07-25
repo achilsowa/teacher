@@ -3,11 +3,11 @@
   but after we must optimize it
 */
 class Academy {
-  public $ci;
-  private $user;
-  private $user_classrooms;
+    public $ci;
+    private $user;
+    private $user_classrooms;
 
-  public function __construct(&$param) {
+    public function __construct(&$param) {
     $this->ci = &get_instance();
     $this->ci->load->library('doctrine');
     $this->user = $param['user'];
@@ -19,7 +19,8 @@ class Academy {
 	&$classrooms[$i];
   }
 
-  public function add_classroom($name, $code, $school_code) {
+
+    public function add_classroom($name, $code, $school_code) {
     $classroom = new \Entity\Classroom();
     $classroom->setName($name);
     $classroom->setCode($code);
@@ -49,7 +50,7 @@ class Academy {
     return $classroom;
   }
 
-  public function get_classrooms($first = false) {
+    public function get_classrooms($first = false) {
     if ($first) {
       $classrooms = 
 	$this->ci->doctrine->em->getRepository('Entity\Classroom_Teacher')
@@ -69,7 +70,7 @@ class Academy {
     } else return array();
   }
 
-  public function get_classroom($id, $add = false) {
+    public function get_classroom($id, $add = false) {
     $classroom = $this->user_classrooms[$id];
     if (!$classroom) {
       $uid = $this->user->getId();
@@ -82,7 +83,7 @@ class Academy {
     return $classroom->getClassroom();
   }
 
-  public function del_classroom($id) {
+    public function del_classroom($id) {
     $classroom = $this->user_classrooms[$id];
     if($classroom != null) {
         $classroom->setActive(0);
@@ -94,7 +95,7 @@ class Academy {
       return -1;
   }
 
-  public function update_classroom($name, $code, $school_code, $id) {
+    public function update_classroom($name, $code, $school_code, $id) {
     $classroom = $this->user_classrooms[$id];
     if ($classroom == null) 
       $classroom = $this->ci->doctrine->em->getRepository('Entity\Classroom')
@@ -123,7 +124,7 @@ class Academy {
     return $classroom;
   }
 
-  public function share_classroom($clid, $email) {
+    public function share_classroom($clid, $email) {
       $classroom = $this->user_classrooms[$clid];
       if ($classroom) $classroom = $classroom->getClassroom();
       else return -1;
@@ -146,7 +147,6 @@ class Academy {
      $this->ci->doctrine->em->flush();
      return 1;
   }
-
 
     public function activate_classroom($clid) {
         $classroom_teacher = $this->ci->doctrine->em->getRepository('Entity\Classroom_Teacher')->findOneBy(
@@ -185,7 +185,7 @@ class Academy {
         return $classroom_teacher->getActive();
     }
 
-  public function std_from_file($clid, $src) {
+    public function std_from_file($clid, $src) {
     if (!file_exists('../app/files/'.$src)) return array(-1);
     $classroom = $this->user_classrooms[$clid];
     if (!$classroom) return array(-3);
@@ -203,37 +203,8 @@ class Academy {
     return $stds;
   }
 
-  public function add_student($name, $email, $phone, $sexe, $img, $clid) {
-      $student = new \Entity\Student();
-      $student->setName($name);
-      $student->setEmail($email);
-      $student->setPhone($phone);
-      $student->setSexe($sexe);
-      $student->setImg($img);
 
-      $clid = (int)$clid;
-      $classroom = $this->user_classrooms[$clid];
-      if ($classroom) {
-        $classroom = $classroom->getClassroom();
-        if ($classroom->cannotBeEditedBy($this->user)) return -2;
-      }
-      else return;
-      $student->setClassroom($classroom);
-      $this->ci->doctrine->em->persist($student);
-      $tests = $this->get_tests();
-      //$marks = array();
-      for ($i=0, $max =count($tests); $i<$max; ++$i){
-          $mark = new \Entity\Mark();
-          $mark->setTest($tests[$i]);
-          $mark->setStudent($student);
-          $this->ci->doctrine->em->persist($mark);
-      }
-      $this->ci->doctrine->em->flush();
-
-      return $student;
-  }
-
-  public function get_students($clid) {
+    public function get_students($clid) {
     $clid = (int)$clid;
     $classroom = $this->user_classrooms[$clid];
     if ($classroom) $classroom = $classroom->getClassroom();
@@ -245,7 +216,7 @@ class Academy {
     return $results;
   }
   
-  public function del_student($id) {
+    public function del_student($id) {
     $id = (int)$id;
     $student = $this->ci->doctrine->em->getRepository('Entity\Student')
       ->find($id);
@@ -259,8 +230,38 @@ class Academy {
     }
       return 0;
   }
-  
-  public function update_student($name, $email, $phone, $sexe, $img, $id) {
+
+    public function add_student($name, $email, $phone, $sexe, $img, $clid) {
+        $student = new \Entity\Student();
+        $student->setName($name);
+        $student->setEmail($email);
+        $student->setPhone($phone);
+        $student->setSexe($sexe);
+        $student->setImg($img);
+
+        $clid = (int)$clid;
+        $classroom = $this->user_classrooms[$clid];
+        if ($classroom) {
+            $classroom = $classroom->getClassroom();
+            if ($classroom->cannotBeEditedBy($this->user)) return -2;
+        }
+        else return;
+        $student->setClassroom($classroom);
+        $this->ci->doctrine->em->persist($student);
+        $tests = $this->get_tests();
+        //$marks = array();
+        for ($i=0, $max =count($tests); $i<$max; ++$i){
+            $mark = new \Entity\Mark();
+            $mark->setTest($tests[$i]);
+            $mark->setStudent($student);
+            $this->ci->doctrine->em->persist($mark);
+        }
+        $this->ci->doctrine->em->flush();
+
+        return $student;
+    }
+
+    public function update_student($name, $email, $phone, $sexe, $img, $id) {
     $student = $this->ci->doctrine->em->getRepository('Entity\Student')
       ->find($id);
     if ($student == null) return -1;
@@ -277,61 +278,74 @@ class Academy {
     return $student;
   }
 
-  public function add_test($code, $perc, $subj, $seq, $date, $clid) {
-      $classroom = $this->user_classrooms[$clid];
-      if ($classroom == null) return -1;
-      $classroom = $classroom->getClassroom();
-      $test = new \Entity\Test();
-      $test->setCode($code);
-      $test->setPercent($perc);
-      $test->setSubject($subj);
-      $test->setSeq($seq);
-      $test->setDate($date);
-      $test->setClassroom($classroom);
-      $test->setResp($this->user);
+    public function save_student($params, $id) {
+        $classroom = $this->user_classrooms[$params['classroom_id']];
+        if ($classroom) {
+            $classroom = $classroom->getClassroom();
+            if ($classroom->cannotBeEditedBy($this->user)) return -2;
+        }
 
-      $this->ci->doctrine->em->persist($test);
+        $student = $this->ci->doctrine->em->getRepository('Entity\Student')->find($id);
+        if ($student == null) $student = new \Entity\Student();
+        $student->setName($params['name']);
+        $student->setEmail($params['email']);
+        $student->setPhone($params['phone']);
+        $student->setSexe($params['sexe']);
+        $student->setImg($params['img']);
 
-      $test_teacher = new \Entity\Test_Teacher();
-      $test_teacher->setTeacher($this->user);
-      $test_teacher->setTest($test);
-      $this->ci->doctrine->em->persist($test_teacher);
+        $student->setClassroom($classroom);
+        $this->ci->doctrine->em->persist($student);
 
-      $students = $this->get_students($classroom->getId());
-      //$marks = array();
-      for ($i=0, $max = count($students); $i<$max; ++$i) {
-          $mark = new \Entity\Mark();
-          $mark->setStudent($students[$i]);
-          $mark->setTest($test);
-          $this->ci->doctrine->em->persist($mark);
-      }
+        if (!$id) {
+            $tests = $this->get_classroom_tests($params['classroom_id']);
+            for ($i=0, $max =count($tests); $i<$max; ++$i){
+                $mark = new \Entity\Mark();
+                $mark->setTest($tests[$i]);
+                $mark->setStudent($student);
+                $this->ci->doctrine->em->persist($mark);
+            }
+        }
+        $this->ci->doctrine->em->flush();
 
-     $this->ci->doctrine->em->flush();
-     return $test;
-  }
+        return $student;
+    }
 
-  public function get_tests() {
-    $tests = $this->ci->doctrine->em->getRepository('Entity\Test_Teacher')
-      ->findByTeacher($this->user);
 
-    $results = array();
-    for($i=0, $max = count($tests); $i<$max; ++$i) {
-      if (!$tests[$i]->getActive()) continue;
-      $test = $tests[$i];
-      $id = $test->getTest()->getClassroom()->getId();
-      if (isset($this->user_classrooms[$id]))
-	$results[] = $tests[$i]->getTest();
-    }	  
-    return $results;
-  }
+    public function get_tests() {
+        $tests = $this->ci->doctrine->em->getRepository('Entity\Test_Teacher')->findByTeacher($this->user);
 
-  public function get_test($id) {
+        $results = array();
+        for($i=0, $max = count($tests); $i<$max; ++$i) {
+            if (!$tests[$i]->getActive()) continue;
+            $test = $tests[$i];
+            $id = $test->getTest()->getClassroom()->getId();
+            if (isset($this->user_classrooms[$id]))
+	        $results[] = $tests[$i]->getTest();
+        }
+        return $results;
+    }
+
+    public function get_classroom_tests($clid) {
+        $tests = $this->ci->doctrine->em->getRepository('Entity\Test_Teacher')->findByTeacher($this->user);
+
+        $results = array();
+        for($i=0, $max = count($tests); $i<$max; ++$i) {
+            if (!$tests[$i]->getActive()) continue;
+            $test = $tests[$i];
+            $id = $test->getTest()->getClassroom()->getId();
+            if ($id == $clid)
+                $results[] = $tests[$i]->getTest();
+        }
+        return $results;
+    }
+
+    public function get_test($id) {
     $test = $this->ci->doctrine->em->getRepository('Entity\Test_Teacher')
       ->findOneBy(array('test'=>$id, 'teacher'=>$this->user->getId()));
     return $test->getTest();
   }
 
-  public function del_test($id) {
+    public function del_test($id) {
     return;
     $test = $this->ci->doctrine->em->getRepository('Entity\Test_Teacher')
       ->findOneBy(array('test'=>$id, 'teacher'=>$this->user->getId()));
@@ -345,7 +359,40 @@ class Academy {
       return 0;
   }
 
-  public function update_test($code, $perc, $subj, $seq, $date, $clid, $id){
+    public function add_test($code, $perc, $subj, $seq, $date, $clid) {
+        $classroom = $this->user_classrooms[$clid];
+        if ($classroom == null) return -1;
+        $classroom = $classroom->getClassroom();
+        $test = new \Entity\Test();
+        $test->setCode($code);
+        $test->setPercent($perc);
+        $test->setSubject($subj);
+        $test->setSeq($seq);
+        $test->setDate($date);
+        $test->setClassroom($classroom);
+        $test->setResp($this->user);
+
+        $this->ci->doctrine->em->persist($test);
+
+        $test_teacher = new \Entity\Test_Teacher();
+        $test_teacher->setTeacher($this->user);
+        $test_teacher->setTest($test);
+        $this->ci->doctrine->em->persist($test_teacher);
+
+        $students = $this->get_students($classroom->getId());
+        //$marks = array();
+        for ($i=0, $max = count($students); $i<$max; ++$i) {
+            $mark = new \Entity\Mark();
+            $mark->setStudent($students[$i]);
+            $mark->setTest($test);
+            $this->ci->doctrine->em->persist($mark);
+        }
+
+        $this->ci->doctrine->em->flush();
+        return $test;
+    }
+
+    public function update_test($code, $perc, $subj, $seq, $date, $clid, $id){
     $test = $this->ci->doctrine->em->getRepository('Entity\Test')
       ->find($id);
     if ($test == null) return -1;
@@ -361,9 +408,42 @@ class Academy {
     return $test;
   }
 
-  public function share_test($tid, $email) {
+    public function save_test($params, $id = 0) {
+        $classroom = $this->user_classrooms[$params['classroom_id']];
+        if ($classroom == null) return -1;
+        $classroom = $classroom->getClassroom();
+        $test = $this->ci->doctrine->em->getRepository('Entity\Test')->find($id);
+        if ($test == null) $test = new \Entity\Test();
+        $test->setCode($params['code']);
+        $test->setSubject($params['subj']);
+        if ($params['date']) $test->setDate(DateTime::createFromFormat('Y-m-d',$params['date']));
+        $test->setDate($params['date']);
+        $test->setClassroom($classroom);
+        $test->setResp($this->user);
+
+        $this->ci->doctrine->em->persist($test);
+
+        $test_teacher = new \Entity\Test_Teacher();
+        $test_teacher->setTeacher($this->user);
+        $test_teacher->setTest($test);
+        $this->ci->doctrine->em->persist($test_teacher);
+
+        $students = $this->get_students($classroom->getId());
+        //$marks = array();
+        for ($i=0, $max = count($students); $i<$max; ++$i) {
+            $mark = new \Entity\Mark();
+            $mark->setStudent($students[$i]);
+            $mark->setTest($test);
+            $this->ci->doctrine->em->persist($mark);
+        }
+
+        $this->ci->doctrine->em->flush();
+        return $test;
+    }
+
+    public function share_test($tid, $email) {
       $test = $this->ci->doctrine->em->getRepository('Entity\Test')->find($tid);
-      if (!$test) return -1;
+      if (!$test) return -5;
       $teacher = $this->ci->doctrine->em->getRepository('Entity\Teacher')->findOneByEmail($email);
       if (!$teacher) return -1;
     
@@ -419,7 +499,7 @@ class Academy {
         return $test_teacher->getActive();
     }
 
-  public function add_mark($stdid, $value, $tid) {
+    public function add_mark($stdid, $value, $tid) {
       $stdid = (int) $stdid;
       $tid = (int) $tid;
       $student = $this->ci->doctrine->em->getRepository('Entity\Student')->find($stdid);
@@ -439,25 +519,44 @@ class Academy {
       return $mark;
   }
 
-  public function update_mark($value, $id) {
-    $id = (int) $id;
-    $mark = $this->ci->doctrine->em->getRepository('Entity\Mark')->find($id);
+    public function update_mark($value, $id) {
+        $id = (int) $id;
+        $mark = $this->ci->doctrine->em->getRepository('Entity\Mark')->find($id);
 
-    if ($mark == null) return -1;
+        if ($mark == null) return -1;
 
-    $mark->setValue($value);
-    $this->ci->doctrine->em->flush();
-    return $mark;
-  }
+        $mark->setValue($value);
+        $this->ci->doctrine->em->flush();
+        return $mark;
+    }
 
-  public function get_marks($tid) {
-    $tid = (int)$tid;
-    $test = $this->ci->doctrine->em->getRepository('Entity\Test')->find($tid);
-    if ($test == null) return Array();
-    $marks = $this->ci->doctrine->em->getRepository('Entity\Mark')
-      ->findByTest($test);
-    return $marks;
-  }
+    public function save_mark($params, $id = 0) {
+        $test = $this->ci->doctrine->em->getRepository('Entity\Test')->find($params['test_id']);
+        if ($test == null) return -3;
+        if ($test->cannotBeEditedBy($this->user)) return -2;
+
+        $mark = $this->ci->doctrine->em->getRepository('Entity\Mark')->find($id);
+        if ($mark == null) $mark = $this->ci->doctrine->em->getRepository('Entity\Mark')->findOneBy(
+                                        array('test'=>$params['test_id'], 'student'=>$params['student_id'])
+                                    );
+        if ($mark == null) $mark = new \Entity\Mark();
+
+        $student = $this->ci->doctrine->em->getRepository('Entity\Student')->find($params['student_id']);
+        if ($student == null) return -1;
+
+        $mark->setStudent($student);
+        $mark->setTest($test);
+        $mark->setValue($params['value']);
+
+        $this->ci->doctrine->em->persist($mark);
+        $this->ci->doctrine->em->flush();
+
+        return $mark;
+    }
+
+    public function get_marks($tid) {
+        return $this->ci->doctrine->em->getRepository('Entity\Mark')->findBy(array('test'=>$tid));
+    }
 
 
   public function add_file($name, $data, $type) {

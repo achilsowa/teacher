@@ -30,10 +30,12 @@ sukuApp.config(['$locationProvider', '$routeProvider', function($locationProvide
         templateUrl: 'views/classroom.html',
         controller: 'SKClassroomCtrl as classroomCtrl',
         resolve:{
-            load_models: ['$location', 'ModelLoaderService', 'AuthLoaderService', 'ClassroomModel', function ($location, ModelLoader, AuthLoader, Classrooms){
+            load_models: ['$location', 'ModelLoaderService', 'AuthLoaderService', 'ClassroomModel', 'trFilter', function ($location, ModelLoader, AuthLoader, Classrooms, tr){
                 var id = $location.path().split('/')[2];
                 return ModelLoader.loadClassroom(id).then(function() {
-                    AuthLoader.page.title = Classrooms.find_by_sid(id).name;
+                    var classroom = Classrooms.find_by_sid(id);
+                    AuthLoader.page.title = tr('Classrooms') + ' : '+ classroom.name;
+                    if (classroom.school) AuthLoader.page.title += ', ' + classroom.school;
                 });
             }]
         }
@@ -50,10 +52,11 @@ sukuApp.config(['$locationProvider', '$routeProvider', function($locationProvide
         templateUrl: 'views/test.html',
         controller: 'SKTestCtrl as testCtrl',
         resolve:{
-            load_models: ['$location', 'ModelLoaderService', 'AuthLoaderService', 'TestModel', function ($location, ModelLoader, AuthLoader, Tests){
+            load_models: ['$location', 'ModelLoaderService', 'AuthLoaderService', 'TestModel', 'trFilter', function ($location, ModelLoader, AuthLoader, Tests, tr){
                 var id = $location.path().split('/')[2];
                 return ModelLoader.loadTest(id).then(function () {
-                    AuthLoader.page.title = Tests.find_by_sid(id).code;
+                    var test = Tests.find_by_sid(id);
+                    AuthLoader.page.title = tr('Tests') + ' : ' + test.code + ', ' + test.classroom.name;
                 });
             }]
         }

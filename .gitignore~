@@ -1,0 +1,10 @@
+*/config/development
+*/logs/log-*.php
+*/logs/!index.html
+*/cache/*
+*/cache/!index.html
+*/cache/!.htaccess
+/nbproject/
+/application/config/database.php
+/application/config/config.php
+/assets/img/uploads/

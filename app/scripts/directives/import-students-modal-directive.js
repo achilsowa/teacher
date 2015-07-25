@@ -21,9 +21,8 @@ sukuApp.directive('importStudentsModal', [function() {
                 'Send': 'Send'
             };
 
-
             $scope.submit = function() {
-                $scope.import();
+                $scope.imports();
             };
         },
         scope: {
@@ -31,7 +30,7 @@ sukuApp.directive('importStudentsModal', [function() {
             loading:'=',
             paths:'=',
             error:'=',
-            import: '&'
+            imports: '&'
         }
     };
 }]);

@@ -2,7 +2,7 @@
  * Created by tchapda gabi on 28/05/2015.
  */
 
-sukuApp.factory('Model', ['$q', '$http', 'PubSubService', 'NotificationService', function($q, $http, Pubsub, Notification){
+sukuApp.factory('Model', ['$q', '$http', 'PubSubService', 'NotificationService', 'trFilter', function($q, $http, Pubsub, Notification, tr){
     var Model = Spine.Model;
 
     Model.all = {};
@@ -153,6 +153,7 @@ sukuApp.factory('Model', ['$q', '$http', 'PubSubService', 'NotificationService',
             $http.post(url, this).then(
                 function(server_response) {
                     var rep = server_response.data;
+                    console.log(rep);
                     rep.status = parseInt(rep.status);
 
                     if (rep.status != 0) {
@@ -209,6 +210,7 @@ sukuApp.factory('Model', ['$q', '$http', 'PubSubService', 'NotificationService',
             $http.get(url).then(
                 function(server_response) {
                     var rep = server_response.data;
+                    console.log(rep);
                     rep.status = parseInt(rep.status);
                     if (rep.status != 0) {
                         response.reject(rep);
@@ -237,6 +239,7 @@ sukuApp.factory('Model', ['$q', '$http', 'PubSubService', 'NotificationService',
                 function(error) {
                     that.isFetched = false;
                     that.isLoading = false;
+                    console.log(error);
                     response.reject(error);
                 });
             return response.promise;
@@ -291,7 +294,7 @@ sukuApp.factory('Model', ['$q', '$http', 'PubSubService', 'NotificationService',
 
     Model.NodeHelper = {
         newItem: function (item) {
-            if (!item.what) return;
+            if (!item.what) return true;
             var what = item.what.split(' ');
             if (what.indexOf());
 
@@ -310,12 +313,13 @@ sukuApp.factory('Model', ['$q', '$http', 'PubSubService', 'NotificationService',
                 function(resp){
                     var rep = resp.data;
                     rep.status = parseInt(rep.status);
+                    var code = parseInt(rep.content);
                     if (rep.status != 0) {
-                        d.reject(rep);
+                        console.log(rep);
+                        that.share_error(code, d, email);
                         return;
                     }
 
-                    var code = parseInt(rep.content);
                     if (code == 1) {
                         /*ok. we ask the email user if he wants to share
                          the test to

@@ -64,7 +64,7 @@
 
     <div class="title" style="text-align: center;">
         <span ng-show="mainCtrl.loading"><img src="imgs/loadings.gif"> </span>
-        <strong ng-bind="mainCtrl.page.title"> </strong>
+        <strong ng-bind="mainCtrl.page.title"></strong>
     </div>
 
     <div class="pull-right notifications">
@@ -98,7 +98,6 @@
 <div id="conn-error-alert" class="alert alert-danger alert-dismissable conn-error-alert">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     {{mainCtrl.strs['Error'] | tr}}!!!<br/> {{mainCtrl.strs['Unable to reach the server'] | tr}}<br/>
-    {{mainCtrl.strs['All the changes made now may not be saved on the server'] | tr }}
 </div>
 
 <div id="uploading-file-alert" class="alert alert-warning uploading-file-alert" ng-show="mainCtrl.serverFileCtrl.loading">
@@ -123,86 +122,28 @@
 
 <!-- Mainly scripts -->
 <script src="scripts/vendors/jquery-2.1.1.js"></script>
-<script src="scripts/vendors/angular.js"></script>
-<script src="scripts/vendors/angular-route.js"></script>
+<script src="scripts/vendors/angular.min.js"></script>
+<script src="scripts/vendors/angular-route.min.js"></script>
 <script src="scripts/vendors/bootstrap.min.js"></script>
-<script src="scripts/vendors/plus.sowa.jquery.js"></script>
+<script src="scripts/vendors/plus.sowa.jquery.min.js"></script>
 <script src="scripts/vendors/jquery.upload.js"></script>
-<script src="scripts/vendors/spine.js"></script>
-<script src="scripts/vendors/datapicker/bootstrap-datepicker.js"></script>
-<script src="scripts/vendors/handsontable.full.js"></script>
-<script src="scripts/vendors/math.js"></script>
+<script src="scripts/vendors/spine.min.js"></script>
+<script src="scripts/vendors/datapicker/bootstrap-datepicker.min.js"></script>
+<script src="scripts/vendors/handsontable.full.min.js"></script>
+<script src="scripts/vendors/math.min.js"></script>
 <script src="scripts/vendors/drag-drop.min.js"></script>
 <script src="scripts/vendors/Chart.min.js"></script>
-<script src="scripts/vendors/strophe.js"></script>
-<script src="scripts/vendors/strophe.register.js"></script>
+<script src="scripts/vendors/strophe.min.js"></script>
+<script src="scripts/vendors/strophe.register.min.js"></script>
 <script src="scripts/vendors/flXHR.js"></script>
 
 <script src="scripts/app.js"></script>
 
-<script src="scripts/services/helper-service.js"></script>
-<script src="scripts/services/model-service.js"></script>
-<script src="scripts/services/classroom-model-service.js"></script>
-<script src="scripts/services/students-classroom-model-factory-service.js"></script>
-<script src="scripts/services/test-model-service.js"></script>
-<script src="scripts/services/marks-test-model-factory-service.js"></script>
-<script src="scripts/services/server-file-model-service.js"></script>
-<script src="scripts/services/chart-data-service.js"></script>
-<script src="scripts/services/chart-view-service.js"></script>
-<script src="scripts/services/excel-column-view-service.js"></script>
-<script src="scripts/services/excel-view-service.js"></script>
-<script src="scripts/services/model-loader-service.js"></script>
-<script src="scripts/services/auth-loader-service.js"></script>
-<script src="scripts/services/strophe-service.js"></script>
-<script src="scripts/services/register-service.js"></script>
-<script src="scripts/services/pubsub-service.js"></script>
-<script src="scripts/services/notification-service.js"></script>
-<script src="scripts/services/translate-service.js"></script>
-
-<script src="scripts/filters/translate-filter.js"></script>
-<script src="scripts/filters/file-name-filter.js"></script>
-<script src="scripts/filters/file-type-filter.js"></script>
-
-<script src="scripts/interceptors/auth-interceptor.js"></script>
-<script src="scripts/interceptors/conn-interceptor.js"></script>
-
-
-<!--<script src="scripts/controllers/all.min.js"></script>-->
-
-<script src="scripts/controllers/switch-view-ctrl.js"></script>
-<script src="scripts/controllers/save-item-ctrl.js"></script>
-<script src="scripts/controllers/import-students-ctrl.js"></script>
-<script src="scripts/controllers/share-elt-ctrl.js"></script>
-<script src="scripts/controllers/sk-classrooms-ctrl.js"></script>
-<script src="scripts/controllers/sk-classroom-ctrl.js"></script>
-<script src="scripts/controllers/sk-tests-ctrl.js"></script>
-<script src="scripts/controllers/sk-test-ctrl.js"></script>
-<script src="scripts/controllers/test-properties-ctrl.js"></script>
-<script src="scripts/controllers/classroom-properties-ctrl.js"></script>
-<script src="scripts/controllers/notification-ctrl.js"></script>
-<script src="scripts/controllers/invite-user-ctrl.js"></script>
-<script src="scripts/controllers/profile-ctrl.js"></script>
-<script src="scripts/controllers/main-ctrl.js"></script>
-
-
-<script src="scripts/directives/datepicker-directive.js"></script>
-<script src="scripts/directives/fixed-height-directive.js"></script>
-<script src="scripts/directives/table-view-directive.js"></script>
-<script src="scripts/directives/grid-view-directive.js"></script>
-<script src="scripts/directives/excel-view-directive.js"></script>
-<script src="scripts/directives/chart-view-directive.js"></script>
-<script src="scripts/directives/save-classroom-modal-directive.js"></script>
-<script src="scripts/directives/share-elt-modal-directive.js"></script>
-<script src="scripts/directives/save-student-modal-directive.js"></script>
-<script src="scripts/directives/save-test-modal-directive.js"></script>
-<script src="scripts/directives/import-students-modal-directive.js"></script>
-<script src="scripts/directives/file-input-directive.js"></script>
-<script src="scripts/directives/auth-modal-directive.js"></script>
-<script src="scripts/directives/test-properties-modal-directive.js"></script>
-<script src="scripts/directives/classroom-properties-modal-directive.js"></script>
-<script src="scripts/directives/notification-modal-directive.js"></script>
-<script src="scripts/directives/invite-user-modal-directive.js"></script>
-<script src="scripts/directives/profile-modal-directive.js"></script>
+<script src="scripts/services/all.min.js"></script>
+<script src="scripts/filters/all.min.js"></script>
+<script src="scripts/interceptors/all.min.js"></script>
+<script src="scripts/controllers/all.min.js"></script>
+<script src="scripts/directives/all.min.js"></script>
 
 
 

@@ -76,14 +76,19 @@
                 </div>
                 <br/>
                 <div class="attachments">
-                    <h5><i class="fa fa-paperclip"></i> Attachments</h5>
-                    <div ng-repeat="file in files" class="file-present">
-                        Files
+                    <h5><i class="fa fa-paperclip"></i> {{strs['Attachments'] | tr}}</h5>
+                    <div ng-repeat="file in files" class="attachment">
+                        <i class="fa fa-{{file | type}}-o"></i>
+                        <div class="text"><br/><span>{{file | name}}</span><br/>
+                            <a class="download pull-right"  ng-href="../files/{{file}}"> <i class="fa fa-download"></i> {{strs['Download'] | tr }}</a>
+                        </div>
                     </div>
+                    <br/>
                     <div class="attach-file">
-                        <button type="button"  class="btn btn-sm btn-primary btn-">
-                            Attach a file
-                        </button>
+                        <button type="button"  class="btn btn-sm btn-primary" ng-click="submitFile()">{{strs['Attach a file'] | tr}}</button>
+                        <form name="fileForm" ng-hide="true">
+                            <input type="file" name="file" class="form-control" />
+                        </form>
                     </div>
                 </div>
                 <br/>
@@ -106,7 +111,7 @@
                             <img width="25" ng-src="{{comment.from.img}}"/>
                             <div class="text"><span class="pseudo">{{comment.from.name}}</span><br/>
                                 {{comment.msg}}<br/>
-                                <small class="date pull-right">{{comment.date}}</small>
+                                <small class="date pull-right">{{comment.date | date:'short'}}</small>
                             </div>
                         </div>
 
@@ -114,7 +119,7 @@
                             <img width="25" ng-src="{{old.from.img}}"/>
                             <div class="text"><span class="pseudo">{{old.from.name}}</span><br/>
                                 {{old.msg}}<br/>
-                                <small class="date pull-right">{{old.date}}</small>
+                                <small class="date pull-right">{{old.date | date:'short'}}</small>
                             </div>
                         </div>
                     </div>

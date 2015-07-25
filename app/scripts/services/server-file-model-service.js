@@ -9,11 +9,10 @@ sukuApp.factory('ServerFileModel', ['Model', 'Helper', '$rootScope', '$q', '$htt
     Server_File.extend({
         url : function (what) {
             if (what == 'save') return '../server/add-server-file';
-        },
-        loading: false,
-        points: ''
+        }
     });
 
+    Server_File.status = { loading: false, points: ''};
 
     Server_File.include({
         validate: function () {
@@ -24,7 +23,7 @@ sukuApp.factory('ServerFileModel', ['Model', 'Helper', '$rootScope', '$q', '$htt
             var url = this.constructor.url('save')+'/'+this.type;
             var response = $q.defer();
             $rootScope.$apply(function() {
-                Server_File.loading = true;
+                Server_File.status.loading = true;
             });
 
 
@@ -33,22 +32,22 @@ sukuApp.factory('ServerFileModel', ['Model', 'Helper', '$rootScope', '$q', '$htt
                     upload: {
                         progress:function(){
                             $rootScope.$apply(function() {
-                                Server_File.points += '.';
-                                console.log('p', Server_File.loading);
+                                Server_File.status.points += '.';
+                                console.log('p', Server_File.status.loading);
                             });
                         }
                     },
                     success:function (rep){
                         $rootScope.$apply(function() {
-                            Server_File.loading = false;
-                            Server_File.points = '';
+                            Server_File.status.loading = false;
+                            Server_File.status.points = '';
                         });
                         response.resolve(rep);
                     },
                     error: function (error){
                         $rootScope.$apply(function() {
-                            Server_File.points = '';
-                            Server_File.loading = false;
+                            Server_File.status.points = '';
+                            Server_File.status.loading = false;
                         });
                         response.reject(error);
                     }
@@ -73,9 +72,10 @@ sukuApp.factory('ServerFileModel', ['Model', 'Helper', '$rootScope', '$q', '$htt
                     console.log(path);
                     $http.post(that.constructor.url('add-file')+'/'+that.sid, {file:path}).then(
                         function(rep){
-                            console.log(rep.data);
-                            rep = parseInt(rep.data);
-                            if (rep != 1) {
+                            rep = rep.data;
+                            console.log(rep);
+                            rep.status = parseInt(rep.status);
+                            if (rep.status != 0) {
                                 d.reject({msg: 'Error while adding the file'});
                                 return;
                             }

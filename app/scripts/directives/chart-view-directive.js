@@ -34,10 +34,7 @@ sukuApp.directive('chartView', ['ChartViewService', function(ChartDialog) {
                 chart = new ChartDialog({meta:$scope.meta, el: $element});
 
 
-            console.log(chart);
-
-            if (excelCtrl.loading) excelCtrl.loading = !excelCtrl.loading;
-            console.log(excelCtrl.loading);
+            console.log(excelCtrl.state);
         }
     };
 }]);
