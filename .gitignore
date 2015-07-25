@@ -12,3 +12,6 @@
 /app/files
 /app/imgs/
 /app/texts/
+/app/scripts/yuicompressor-2.4.8.jar
+/app/scripts/minifyjs.sh
+/app/scripts/minifycss.sh

@@ -23,11 +23,31 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="index.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="104" column="144" selection-start="5403" selection-end="5403" vertical-scroll-proportion="-7.5" vertical-offset="1380" max-vertical-offset="3240">
+            <state line="196" column="49" selection-start="10009" selection-end="10009" vertical-scroll-proportion="0.41525424" vertical-offset="2695" max-vertical-offset="3420">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="excel-column-view-service.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/scripts/services/excel-column-view-service.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="55" column="22" selection-start="1982" selection-end="1982" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2895">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="excel-column-directive.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/scripts/directives/excel-column-directive.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="5" column="57" selection-start="216" selection-end="216" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -111,10 +131,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test-model-service.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="test-model-service.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/scripts/services/test-model-service.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="87" selection-start="137" selection-end="137" vertical-scroll-proportion="0.0732899" vertical-offset="0" max-vertical-offset="1275">
+            <state line="3" column="87" selection-start="137" selection-end="137" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1275">
               <folding />
             </state>
           </provider>
@@ -214,7 +234,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/app/scripts/filters/file-extension-filter.js" />
         <option value="$PROJECT_DIR$/server/application/models/Entity/Classroom.php" />
         <option value="$PROJECT_DIR$/app/scripts/directives/classroom-properties-modal-directive.js" />
         <option value="$PROJECT_DIR$/app/.htaccess" />
@@ -258,13 +277,14 @@
         <option value="$PROJECT_DIR$/server/application/config/config.php" />
         <option value="$PROJECT_DIR$/app/scripts/services/excel-view-service.js" />
         <option value="$PROJECT_DIR$/app/views/excel-view.html" />
-        <option value="$PROJECT_DIR$/app/index.html" />
         <option value="$PROJECT_DIR$/app/scripts/controllers/main-ctrl.js" />
         <option value="$PROJECT_DIR$/app/scripts/services/server-file-model-service.js" />
         <option value="$PROJECT_DIR$/app/scripts/services/model-service.js" />
         <option value="$PROJECT_DIR$/server/application/libraries/Academy.php" />
         <option value="$PROJECT_DIR$/server/application/controllers/app.php" />
         <option value="$PROJECT_DIR$/app/scripts/services/test-model-service.js" />
+        <option value="$PROJECT_DIR$/app/scripts/directives/excel-column-directive.js" />
+        <option value="$PROJECT_DIR$/app/index.html" />
       </list>
     </option>
   </component>
@@ -529,6 +549,28 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="directives" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="suku" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="suku" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="controllers" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -619,11 +661,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/server/application/models/Entity/Classroom.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="201" column="20" selection-start="2985" selection-end="2985" vertical-scroll-proportion="-6.1666665" vertical-offset="2867" max-vertical-offset="3525" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/scripts/controllers/sk-tests-ctrl.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="660" />
@@ -823,13 +860,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/scripts/services/excel-column-view-service.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="55" column="22" selection-start="1982" selection-end="1982" vertical-scroll-proportion="0.0" vertical-offset="598" max-vertical-offset="2895">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/server/application/config/config.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="250" column="36" selection-start="8712" selection-end="8712" vertical-scroll-proportion="-5.625" vertical-offset="3615" max-vertical-offset="5565">
@@ -944,13 +974,6 @@
     <entry file="file://$PROJECT_DIR$/app/scripts/controllers/main-ctrl.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="74" column="48" selection-start="2195" selection-end="2195" vertical-scroll-proportion="0.0" vertical-offset="699" max-vertical-offset="1350">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="104" column="144" selection-start="5403" selection-end="5403" vertical-scroll-proportion="-7.5" vertical-offset="1380" max-vertical-offset="3240">
           <folding />
         </state>
       </provider>
@@ -1117,7 +1140,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/scripts/services/test-model-service.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="87" selection-start="137" selection-end="137" vertical-scroll-proportion="0.0732899" vertical-offset="0" max-vertical-offset="1275">
+        <state line="3" column="87" selection-start="137" selection-end="137" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1275">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scripts/services/excel-column-view-service.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="55" column="22" selection-start="1982" selection-end="1982" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2895">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scripts/directives/excel-column-directive.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="57" selection-start="216" selection-end="216" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="196" column="49" selection-start="10009" selection-end="10009" vertical-scroll-proportion="0.41525424" vertical-offset="2695" max-vertical-offset="3420">
           <folding />
         </state>
       </provider>

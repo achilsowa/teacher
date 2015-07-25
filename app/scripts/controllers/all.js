@@ -212,7 +212,11 @@ sukuApp.controller('MainCtrl', ['AuthLoaderService', 'ClassroomModel', 'TestMode
         'Settings': 'Settings',
         'Logout': 'Logout',
 
-        'Uploading file': 'Uploading file'
+        'Uploading file': 'Uploading file',
+
+        'Error' : 'Error',
+        'Unable to reach the server' : 'Unable to reach the server',
+        'All the changes made now may not be saved on the server': 'All the changes made now may not be saved on the server'
     };
 
 
@@ -263,10 +267,7 @@ sukuApp.controller('MainCtrl', ['AuthLoaderService', 'ClassroomModel', 'TestMode
 
     var initServerFileCtrl = function () {
 
-        self.serverFileCtrl = {
-            loading: ServerFile.loading,
-            points: ServerFile.points
-        };
+        self.serverFileCtrl = ServerFile.status;
         console.log(self.serverFileCtrl);
     };
 
@@ -602,7 +603,7 @@ sukuApp.controller('SKTestCtrl', ['TestModel', 'MarksTestModelFactory', 'Classro
     classroom = ClassroomModel.find_by_sid(classroom.sid);
     self.StudentsModel = StudentsClassroomModelFactory.create(classroom.sid);
 
-    /*
+
     self.StudentsModel.each(function (std) {
         var mark = self.MarksModel.stdids[std.sid];
         if (!mark)
@@ -610,7 +611,7 @@ sukuApp.controller('SKTestCtrl', ['TestModel', 'MarksTestModelFactory', 'Classro
 
         mark.psave();
         console.log(mark);
-    });*/
+    });
 
 
     self.headers = [
@@ -642,7 +643,7 @@ sukuApp.controller('SKTestCtrl', ['TestModel', 'MarksTestModelFactory', 'Classro
             self.propCtrl.setTest(self.test);
             self.propCtrl.openDialog();
         }
-    }
+    };
 
     initShareCtrl();
     initPropertiesCtrl();
@@ -718,6 +719,7 @@ sukuApp.controller('TestPropertiesCtrl', ['ClassroomModel', 'StudentsClassroomMo
         self.error = null;
         self.loading = true;
 	    self.test = test;
+        self.files = test.files;
         self.olds = test.olds;
         self.comments = test.comments;
 
@@ -812,12 +814,12 @@ sukuApp.controller('TestPropertiesCtrl', ['ClassroomModel', 'StudentsClassroomMo
     };
 
     self.publish = function (comment){
-	    self.working = true;
+        self.working = true;
         var item = {msg: comment};
-	    self.test.publish(item).then(
-	    function(){
+        self.test.publish(item).then(
+            function(){
                 self.working = false;
-
+                self.error = null;
             },
             function (error){
                 console.log(error);
@@ -825,5 +827,21 @@ sukuApp.controller('TestPropertiesCtrl', ['ClassroomModel', 'StudentsClassroomMo
                 self.working = false;
             }
         );
+    };
+
+    self.addFile = function (file) {
+        console.log(self.test);
+        self.test.addFile(file).then(
+            function (rep) {
+                self.working = false;
+                console.log('add file');
+                self.error = null;
+                console.log(file);
+                self.publish('attached a file ('+file.name+')');
+            }, function (error){
+                self.working = false;
+                console.log(error);
+                self.error = error.msg;
+            });
     };
 }]);

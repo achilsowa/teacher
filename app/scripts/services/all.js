@@ -874,7 +874,7 @@ sukuApp.factory('ExcelColumnViewService', ['Helper', function (Helper){
  */
 
 
-sukuApp.factory('ExcelViewService', ['Helper', 'ExcelColumnViewService', 'ChartViewService', function (Helper, Column, ChartDialog){
+sukuApp.factory('ExcelViewService', ['Helper', 'ExcelColumnViewService', 'ChartViewService', '$rootScope', function (Helper, Column, ChartDialog, $rootScope){
 
     var Views = [];
 
@@ -1041,7 +1041,7 @@ sukuApp.factory('ExcelViewService', ['Helper', 'ExcelColumnViewService', 'ChartV
                     }
                 }
             };
-
+            this.state = {is_rendering : true};
             this.headers = args['headers'];
 
             this.el = args['el'];
@@ -1086,15 +1086,13 @@ sukuApp.factory('ExcelViewService', ['Helper', 'ExcelColumnViewService', 'ChartV
 
                     autoWrapRow: true,
                     minSpareRows: 0,
-                    'afterRender': function (isForced) {
-                        //console.log('after render : '+isForced);
-                    },
                     manualRowResize: true,
                     manualColumnResize: true,
                     height:height,/*
                      manualColumnMove: true,
                      contextMenu: true,*/
                     'beforeKeyDown': this.proxy(this.before_key_down),
+                    'beforeRender': this.proxy(this.before_render),
                     'afterRender': this.proxy(this.after_render),
                     'afterChange': this.proxy(this.after_change),
                     'beforeChange': this.proxy(this.before_change),
@@ -1275,9 +1273,14 @@ sukuApp.factory('ExcelViewService', ['Helper', 'ExcelColumnViewService', 'ChartV
         },
 
         after_render: function (isForced) {
+
             if (!this.selected) return;
             for (var i = 0; i < this.selected.length; ++i)
                 this.select_area(this.selected[i]);
+        },
+
+        before_render: function (isForced) {
+            console.log(this.state.is_rendering);
         },
 
         after_selection_end: function (row1, col1, row2, col2) {
@@ -1358,7 +1361,11 @@ sukuApp.factory('ExcelViewService', ['Helper', 'ExcelColumnViewService', 'ChartV
         },
 
         addAll: function () {
-            console.log(this.columns.length);
+            console.time('addll');
+            this.el.find('[loading-gif]').css('display', 'block');
+            this.hot_table.css('display', 'none');
+            this.state.is_rendering = true;
+            console.log(this.columns);
             for (var col = 0; col < this.columns.length; ++col){
                 //console.log(this.columns[col].items);
                 for (var row = 0; row < this.columns[col].items.length; ++row){
@@ -1367,6 +1374,12 @@ sukuApp.factory('ExcelViewService', ['Helper', 'ExcelColumnViewService', 'ChartV
                 }
             }
             this.hot.clearUndo();
+
+            this.state.is_rendering = false;
+            this.hot_table.css('display', 'block');
+            this.hot.render();
+            this.el.find('[loading-gif]').css('display', 'none');
+            console.timeEnd('addll');
         },
 
         data: function (i, j) {
@@ -1378,6 +1391,7 @@ sukuApp.factory('ExcelViewService', ['Helper', 'ExcelColumnViewService', 'ChartV
         },
 
         addOne: function (item, row, col) {
+
             if (col == undefined) {
                 //this.hot.alter('insert_row');
                 var count = this.hot.countRows() - 1;
@@ -1849,7 +1863,7 @@ sukuApp.factory('ModelLoaderService', ['$q', 'ClassroomModel', 'TestModel', 'Stu
  * Created by tchapda gabi on 28/05/2015.
  */
 
-sukuApp.factory('Model', ['$q', '$http', 'PubSubService', 'NotificationService', function($q, $http, Pubsub, Notification){
+sukuApp.factory('Model', ['$q', '$http', 'PubSubService', 'NotificationService', 'trFilter', function($q, $http, Pubsub, Notification, tr){
     var Model = Spine.Model;
 
     Model.all = {};
@@ -2000,6 +2014,7 @@ sukuApp.factory('Model', ['$q', '$http', 'PubSubService', 'NotificationService',
             $http.post(url, this).then(
                 function(server_response) {
                     var rep = server_response.data;
+                    console.log(rep);
                     rep.status = parseInt(rep.status);
 
                     if (rep.status != 0) {
@@ -2056,6 +2071,7 @@ sukuApp.factory('Model', ['$q', '$http', 'PubSubService', 'NotificationService',
             $http.get(url).then(
                 function(server_response) {
                     var rep = server_response.data;
+                    console.log(rep);
                     rep.status = parseInt(rep.status);
                     if (rep.status != 0) {
                         response.reject(rep);
@@ -2084,6 +2100,7 @@ sukuApp.factory('Model', ['$q', '$http', 'PubSubService', 'NotificationService',
                 function(error) {
                     that.isFetched = false;
                     that.isLoading = false;
+                    console.log(error);
                     response.reject(error);
                 });
             return response.promise;
@@ -2138,7 +2155,7 @@ sukuApp.factory('Model', ['$q', '$http', 'PubSubService', 'NotificationService',
 
     Model.NodeHelper = {
         newItem: function (item) {
-            if (!item.what) return;
+            if (!item.what) return true;
             var what = item.what.split(' ');
             if (what.indexOf());
 
@@ -2157,12 +2174,13 @@ sukuApp.factory('Model', ['$q', '$http', 'PubSubService', 'NotificationService',
                 function(resp){
                     var rep = resp.data;
                     rep.status = parseInt(rep.status);
+                    var code = parseInt(rep.content);
                     if (rep.status != 0) {
-                        d.reject(rep);
+                        console.log(rep);
+                        that.share_error(code, d, email);
                         return;
                     }
 
-                    var code = parseInt(rep.content);
                     if (code == 1) {
                         /*ok. we ask the email user if he wants to share
                          the test to
@@ -2626,11 +2644,10 @@ sukuApp.factory('ServerFileModel', ['Model', 'Helper', '$rootScope', '$q', '$htt
     Server_File.extend({
         url : function (what) {
             if (what == 'save') return '../server/add-server-file';
-        },
-        loading: false,
-        points: ''
+        }
     });
 
+    Server_File.status = { loading: false, points: ''};
 
     Server_File.include({
         validate: function () {
@@ -2641,7 +2658,7 @@ sukuApp.factory('ServerFileModel', ['Model', 'Helper', '$rootScope', '$q', '$htt
             var url = this.constructor.url('save')+'/'+this.type;
             var response = $q.defer();
             $rootScope.$apply(function() {
-                Server_File.loading = true;
+                Server_File.status.loading = true;
             });
 
 
@@ -2650,22 +2667,22 @@ sukuApp.factory('ServerFileModel', ['Model', 'Helper', '$rootScope', '$q', '$htt
                     upload: {
                         progress:function(){
                             $rootScope.$apply(function() {
-                                Server_File.points += '.';
-                                console.log('p', Server_File.loading);
+                                Server_File.status.points += '.';
+                                console.log('p', Server_File.status.loading);
                             });
                         }
                     },
                     success:function (rep){
                         $rootScope.$apply(function() {
-                            Server_File.loading = false;
-                            Server_File.points = '';
+                            Server_File.status.loading = false;
+                            Server_File.status.points = '';
                         });
                         response.resolve(rep);
                     },
                     error: function (error){
                         $rootScope.$apply(function() {
-                            Server_File.points = '';
-                            Server_File.loading = false;
+                            Server_File.status.points = '';
+                            Server_File.status.loading = false;
                         });
                         response.reject(error);
                     }
@@ -2690,9 +2707,10 @@ sukuApp.factory('ServerFileModel', ['Model', 'Helper', '$rootScope', '$q', '$htt
                     console.log(path);
                     $http.post(that.constructor.url('add-file')+'/'+that.sid, {file:path}).then(
                         function(rep){
-                            console.log(rep.data);
-                            rep = parseInt(rep.data);
-                            if (rep != 1) {
+                            rep = rep.data;
+                            console.log(rep);
+                            rep.status = parseInt(rep.status);
+                            if (rep.status != 0) {
                                 d.reject({msg: 'Error while adding the file'});
                                 return;
                             }
@@ -2825,7 +2843,7 @@ sukuApp.factory('StudentsClassroomModelFactory', ['Model', 'ClassroomModel', 'He
 /**
  * Created by tchapda gabi on 28/05/2015.
  */
-sukuApp.factory('TestModel', ['Model', 'Helper', function(Model, Helper){
+sukuApp.factory('TestModel', ['Model', 'ServerFileModel', 'Helper', 'RegisterService', 'PubSubService', function(Model, ServerFile, Helper, Register, Pubsub){
     var Test = Model.sub();
     Test.configure('Test', //name
         'code', 'date', 'subject', 'classroom', 'responsible', 'files',
@@ -2839,6 +2857,7 @@ sukuApp.factory('TestModel', ['Model', 'Helper', function(Model, Helper){
             if (what == 'fetch_one') return '../server/get-test';
             if (what == 'share') return '../server/share-test';
             if (what == 'activate') return '../server/activate-test';
+            if (what == 'add-file') return '../server/add-file-test';
         },
 
         sids : [],
@@ -2851,6 +2870,7 @@ sukuApp.factory('TestModel', ['Model', 'Helper', function(Model, Helper){
         mustHaveNode: true
     });
 
+    Test.include(ServerFile.Helper);
     Test.include({
         share_error: function (code, d, email) {
             if (code == -1) {
@@ -2858,7 +2878,7 @@ sukuApp.factory('TestModel', ['Model', 'Helper', function(Model, Helper){
             }else if (code == -3){
                 d.reject({what:21, msg: 'You already share this classroom with '+email});
             }else if (code == -2){
-                d.reject({what:22, msg: 'You need to share the classroom '+that.classroom_name+' before you can share this test ', code:code});
+                d.reject({what:22, msg: 'You need to share the classroom ('+this.classroom.name+') before you can share this test ', code:code});
             }else {
                 d.reject({what:23, msg: 'Error while sharing the test', code:code});
             }
@@ -2875,7 +2895,7 @@ sukuApp.factory('TestModel', ['Model', 'Helper', function(Model, Helper){
             this.subject = Helper.present(this.subject);
             this.classroom_name = Helper.present(this.classroom.name);
 
-            if (!this.responsible) this.responsible = 'stanley';//Gab.user.name;
+            if (!this.responsible) this.responsible = Register.user.name;
             this.responsible = Helper.present(this.responsible);
 
             if (this.id){
@@ -2895,6 +2915,8 @@ sukuApp.factory('TestModel', ['Model', 'Helper', function(Model, Helper){
     });
     Test.include(Model.NodeHelper.Methods);
     Model.all[Test.Name] = Test;
+
+    Pubsub.conn.addHandler(Model.NodeHelper.newItem,  null, "message", null, null, Pubsub.service);
     return Test;
 }]);
 /**

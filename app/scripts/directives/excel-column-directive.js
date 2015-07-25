@@ -3,7 +3,7 @@
  */
 /*Nous portons tous les masques. Et vient un temps ou on ne peut plus les enlever sans se gratter la peau*/
 
-sukuApp.directive('excelColumn', ['Column', function (Column){
+sukuApp.directive('excelColumn', ['ExcelColumnViewService', function (Column){
     return {
         restrict: 'A',
 
