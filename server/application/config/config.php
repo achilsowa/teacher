@@ -15,7 +15,7 @@
 |
 */
 
-$config['base_url']	= '/suku/';
+$config['base_url']	= '/sukull/';
 //$config['base_url']	= 'http://coolsoftware.com/ischool/';
 
 /*
