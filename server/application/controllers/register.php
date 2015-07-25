@@ -98,7 +98,11 @@ class Register extends CI_Controller {
           $msg = '<div>Thanks you for joining sukull. We hope you will enjoy<br/>'.
               'Please follow the link to confirm your registration <br/>'.
               '<a href="'.$url.'/register_end.php?email='.$code.'" >';
-          mail($email, 'Account validation', $msg);
+          $header = 'MIME-Version: 1.0' . "\r\n"
+              .'Content-type: text/html; charset=utf8' . "\r\n"
+              . "\r\n"
+              .'Content-Transfer-Encoding: 8bit';
+          mail($email, 'Account validation', $msg, $header);
           header('Location: '.$data['base'].'register_ok.php?email='.$code);
           return;
       } catch(Exception $e) {

@@ -23,10 +23,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="index.html" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="23" selection-start="135" selection-end="135" vertical-scroll-proportion="0.076271184" vertical-offset="0" max-vertical-offset="3420">
+            <state line="3" column="23" selection-start="135" selection-end="135" vertical-scroll-proportion="-1.875" vertical-offset="0" max-vertical-offset="3420">
               <folding />
             </state>
           </provider>
@@ -62,7 +62,16 @@
       <file leaf-file-name="app.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/application/controllers/app.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="416" column="0" selection-start="15137" selection-end="15137" vertical-scroll-proportion="0.0" vertical-offset="6240" max-vertical-offset="11265">
+            <state line="29" column="42" selection-start="954" selection-end="954" vertical-scroll-proportion="-8.916667" vertical-offset="221" max-vertical-offset="11265">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="register.php" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/server/application/controllers/register.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="104" column="7" selection-start="3345" selection-end="3345" vertical-scroll-proportion="0.8756219" vertical-offset="1032" max-vertical-offset="4575">
               <folding />
             </state>
           </provider>
@@ -99,15 +108,6 @@
         <entry file="file://$PROJECT_DIR$/server/application/libraries/Academy.php">
           <provider selected="true" editor-type-id="text-editor">
             <state line="576" column="27" selection-start="20044" selection-end="20044" vertical-scroll-proportion="0.0" vertical-offset="8640" max-vertical-offset="9585">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="excel-view.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/views/excel-view.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="54" column="0" selection-start="2542" selection-end="2542" vertical-scroll-proportion="0.0" vertical-offset="810" max-vertical-offset="915">
               <folding />
             </state>
           </provider>
@@ -153,7 +153,6 @@
         <option value="$PROJECT_DIR$/index.php" />
         <option value="$PROJECT_DIR$/app/scripts/controllers/notification-ctrl.js" />
         <option value="$PROJECT_DIR$/login.php" />
-        <option value="$PROJECT_DIR$/server/application/controllers/register.php" />
         <option value="$PROJECT_DIR$/server/application/config/routes.php" />
         <option value="$PROJECT_DIR$/app/scripts/directives/test-properties-modal-directive.js" />
         <option value="$PROJECT_DIR$/app/scripts/controllers/sk-test-ctrl.js" />
@@ -174,6 +173,7 @@
         <option value="$PROJECT_DIR$/app/scripts/directives/excel-column-directive.js" />
         <option value="$PROJECT_DIR$/app/index.html" />
         <option value="$PROJECT_DIR$/server/application/config/config.php" />
+        <option value="$PROJECT_DIR$/server/application/controllers/register.php" />
       </list>
     </option>
   </component>
@@ -257,6 +257,28 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="application" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="suku" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sukull" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="application" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="controllers" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -454,11 +476,6 @@
         <state line="430" column="26" selection-start="6547" selection-end="6554" vertical-scroll-proportion="0.0" vertical-offset="6277" max-vertical-offset="6945" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/application/controllers/register.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="163" column="19" selection-start="5272" selection-end="5272" vertical-scroll-proportion="0.56053066" vertical-offset="2107" max-vertical-offset="4515" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/styles/index.css">
       <provider selected="true" editor-type-id="text-editor">
         <state line="899" column="9" selection-start="14982" selection-end="14982" vertical-scroll-proportion="0.0" vertical-offset="13086" max-vertical-offset="14265" />
@@ -602,13 +619,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/application/controllers/app.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="416" column="0" selection-start="15137" selection-end="15137" vertical-scroll-proportion="0.0" vertical-offset="6240" max-vertical-offset="11265">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/scripts/services/test-model-service.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="13" column="63" selection-start="646" selection-end="646" vertical-scroll-proportion="0.0" vertical-offset="195" max-vertical-offset="1275">
@@ -639,7 +649,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="23" selection-start="135" selection-end="135" vertical-scroll-proportion="0.076271184" vertical-offset="0" max-vertical-offset="3420">
+        <state line="3" column="23" selection-start="135" selection-end="135" vertical-scroll-proportion="-1.875" vertical-offset="0" max-vertical-offset="3420">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/application/controllers/app.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="42" selection-start="954" selection-end="954" vertical-scroll-proportion="-8.916667" vertical-offset="221" max-vertical-offset="11265">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/application/controllers/register.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="104" column="7" selection-start="3345" selection-end="3345" vertical-scroll-proportion="0.8756219" vertical-offset="1032" max-vertical-offset="4575">
           <folding />
         </state>
       </provider>
