@@ -556,8 +556,7 @@ class App extends CI_Controller {
     function get_user_info($fake_jid) {
         if ($fake_jid) {
             $email = str_replace('-', '@', $fake_jid);
-            $user = $this->em->getRepository('Entity\Member')->
-                findOneBy(array('email'=>$email));
+            $user = $this->em->getRepository('Entity\Member')->findOneBy(array('email'=>$email));
         }else {
             $email = $this->user->getEmail();
             $user = $this->user;

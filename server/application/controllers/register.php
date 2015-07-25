@@ -74,8 +74,9 @@ class Register extends CI_Controller {
                 $header .= 'Content-Transfer-Encoding: 8bit\n';
                 $header .= 'From: user@sukull.com';
 
-                mail($email, 'Account validation', $msg, $header);
-                header('Location: '.$data['base'].'register_ok.php?email='.$code);
+                if (mail($email, 'Account validation', $msg, $header))
+                    header('Location: '.$data['base'].'register_ok.php?email='.$code);
+                else header('Location: '.$data['base'].'register.php?error=unable to send mail to '.$email);
                 return;
             }
         }else $teacher = new \Entity\Teacher();
@@ -111,12 +112,15 @@ class Register extends CI_Controller {
             $msg = '<div>Thanks you for joining sukull. We hope you will enjoy<br/>'.
                 'Please follow the link to confirm your registration <br/>'.
                 '<a href="'.$url.'/register_end.php?email='.$code.'" >';
-            $header = 'MIME-Version: 1.0' . "\r\n"
-              . 'Content-type: text/html; charset=utf8' . "\r\n"
-              . "\r\n"
-              .'Content-Transfer-Encoding: 8bit';
-            mail($email, 'Account validation', $msg, $header);
-            header('Location: '.$data['base'].'register_ok.php?email='.$code);
+
+            $header =  'MIME-Version: 1.0';
+            $header .= 'Content-Type:text/html; charset=iso-8859-5\n';
+            $header .= 'Content-Transfer-Encoding: 8bit\n';
+            $header .= 'From: user@sukull.com';
+            
+            if (mail($email, 'Account validation', $msg, $header))
+                header('Location: '.$data['base'].'register_ok.php?email='.$code);
+            else header('Location: '.$data['base'].'register.php?error=unable to send mail to '.$email);
             return;
         } catch(Exception $e) {
 
