@@ -2,116 +2,129 @@
 
 class Register extends CI_Controller {
   
-  private $base;
-  public $em;
-  public function __construct() {
-    parent::__construct();
-    $this->load->library('doctrine');
-    $this->em = $this->doctrine->em;
-    $this->load->library('session');
-  }
-
-  function signin() {
-    $data['base'] = $this->config->item('base_url');
-
-    if (empty($_POST['email']) || empty($_POST['password'])) {
-      $error = 'email and password are mandatory';
-      header('Location: '.$data['base'].'login.php?error='.$error);
-      return;
+    private $base;
+    public $em;
+    public function __construct() {
+        parent::__construct();
+        $this->load->library('doctrine');
+        $this->em = $this->doctrine->em;
+        $this->load->library('session');
     }
-    
-    $email = $_POST['email'];
-    $pwd = $_POST['password'];
-    
-    $user = $this->em->getRepository('Entity\Member')->
-      findOneBy(array('email'=>$email));
-      if ($user === null)
-	{
-	    $error = 'incorrect email';
-        header('Location: '.$data['base'].'login.php?error='.$error);
-	    return;
-	}
-    
-      if ($user->getPwd() != $pwd)
-	{
-	    $error = 'incorrect pwd';
-        header('Location: '.$data['base'].'login.php?error='.$error);
-	    return;
-	}
-      $this->session->set_userdata('user-id', $user->getId());
-      $this->session->set_userdata('first', '0');
-      header('Location: '.$data['base'].'app/');
-      return;
-  }
 
-  function signup() {
-      $data['base'] = $this->config->item('base_url');
+    function signin() {
+        $data['base'] = $this->config->item('base_url');
 
-      if (empty($_POST['email'])) {
-        $error = 'email is mandatory';
-        header('Location: '.$data['base'].'register.php?error='.$error);
+        if (empty($_POST['email']) || empty($_POST['password'])) {
+            $error = 'email and password are mandatory';
+            header('Location: '.$data['base'].'login.php?error='.$error);
+            return;
+        }
+    
+        $email = $_POST['email'];
+        $pwd = $_POST['password'];
+    
+        $user = $this->em->getRepository('Entity\Member')->findOneBy(array('email'=>$email));
+        if ($user === null){
+	        $error = 'incorrect email';
+            header('Location: '.$data['base'].'login.php?error='.$error);
+	        return;
+	    }
+    
+        if ($user->getPwd() != $pwd){
+	        $error = 'incorrect pwd';
+            header('Location: '.$data['base'].'login.php?error='.$error);
+	        return;
+	    }
+        $this->session->set_userdata('user-id', $user->getId());
+        $this->session->set_userdata('first', '0');
+        header('Location: '.$data['base'].'app/');
         return;
-      }
+    }
+
+    function signup() {
+        $data['base'] = $this->config->item('base_url');
+
+        if (empty($_POST['email'])) {
+            $error = 'email is mandatory';
+            header('Location: '.$data['base'].'register.php?error='.$error);
+            return;
+        }
     
-      $email = $_POST['email'];
+        $email = $_POST['email'];
 
 
-      $teacher = $this->em->getRepository('Entity\Member')->findOneBy(array('email'=>$email));
-      if ($teacher != null) {
-          if ($teacher->getActive() == 1) {
-              $error = $email.' is already used! <br/>Please choose another';
-              header('Location: '.$data['base'].'register.php?error='.$error);
-              return;
-          }else if ($teacher->getActive() == 2) {
+        $teacher = $this->em->getRepository('Entity\Member')->findOneBy(array('email'=>$email));
+        if ($teacher != null) {
+            if ($teacher->getActive() == 1 || $teacher->getActive() == 0) {
+                $error = $email.' is already used! <br/>Please choose another';
+                header('Location: '.$data['base'].'register.php?error='.$error);
+                return;
+            }else if ($teacher->getActive() == 2) {
               /*the teacher has already been invited but is creating a new account by his own*/
-          }
-      }else $teacher = new \Entity\Teacher();
+                $code = $email.'&id='.$teacher->getName();
 
-      $teacher->setEmail($email);
-      $teacher->setName('unknow');
-      $teacher->setPwd('pwd');
-      $teacher->setActive(2);
+                $url = $this->config->item('base_url');
+                $msg = '<div>Thanks you for joining sukull. We hope you will enjoy<br/>'.
+                    'Please follow the link to confirm your registration <br/>'.
+                    '<a href="'.$url.'/register_end.php?email='.$code.'" >';
 
-      $i = 0;
-      $username = explode('@', $email)[0];
-      $username_i = $username;
-      do {
-          if ($i) $username_i = $username.$i;
-          ++$i;
-          $user = $this->em->getRepository('Entity\Member')->findOneBy(array('username'=>$username_i));
-          $username_i = $username.$i;
 
-      }while($user != null);
+                $header =  'MIME-Version: 1.0';
+                $header .= 'Content-Type:text/html; charset=iso-8859-5\n';
+                $header .= 'Content-Transfer-Encoding: 8bit\n';
+                $header .= 'From: user@sukull.com';
 
-      if (--$i == 0) $teacher->setUsername($username); else $teacher->setUsername($username.$i);
-      $teacher->setImg();
+                mail($email, 'Account validation', $msg, $header);
+                header('Location: '.$data['base'].'register_ok.php?email='.$code);
+                return;
+            }
+        }else $teacher = new \Entity\Teacher();
 
-      try {
-          $this->em->persist($teacher);
-          $this->em->flush();
-          $teacher->setName(sha1(sha1($teacher->getId().$teacher->getEmail())));
-          $this->em->flush();
+        $teacher->setEmail($email);
+        $teacher->setName('unknow');
+        $teacher->setPwd('pwd');
+        $teacher->setActive(2);
 
-          $code = $email.'&id='.$teacher->getName();
+        $i = 0;
+        $username = explode('@', $email)[0];
+        $username_i = $username;
+        do {
+            if ($i) $username_i = $username.$i;
+            ++$i;
+            $user = $this->em->getRepository('Entity\Member')->findOneBy(array('username'=>$username_i));
+            $username_i = $username.$i;
 
-          $url = $this->config->item('base_url');
-          $msg = '<div>Thanks you for joining sukull. We hope you will enjoy<br/>'.
-              'Please follow the link to confirm your registration <br/>'.
-              '<a href="'.$url.'/register_end.php?email='.$code.'" >';
-          $header = 'MIME-Version: 1.0' . "\r\n"
-              .'Content-type: text/html; charset=utf8' . "\r\n"
+        }while($user != null);
+
+        if (--$i == 0) $teacher->setUsername($username); else $teacher->setUsername($username.$i);
+        $teacher->setImg();
+
+        try {
+            $this->em->persist($teacher);
+            $this->em->flush();
+            $teacher->setName(sha1(sha1($teacher->getId().$teacher->getEmail())));
+            $this->em->flush();
+
+            $code = $email.'&id='.$teacher->getName();
+
+            $url = $this->config->item('base_url');
+            $msg = '<div>Thanks you for joining sukull. We hope you will enjoy<br/>'.
+                'Please follow the link to confirm your registration <br/>'.
+                '<a href="'.$url.'/register_end.php?email='.$code.'" >';
+            $header = 'MIME-Version: 1.0' . "\r\n"
+              . 'Content-type: text/html; charset=utf8' . "\r\n"
               . "\r\n"
               .'Content-Transfer-Encoding: 8bit';
-          mail($email, 'Account validation', $msg, $header);
-          header('Location: '.$data['base'].'register_ok.php?email='.$code);
-          return;
-      } catch(Exception $e) {
+            mail($email, 'Account validation', $msg, $header);
+            header('Location: '.$data['base'].'register_ok.php?email='.$code);
+            return;
+        } catch(Exception $e) {
 
-          $error = 'an internal error has occurred. please try later';
+            $error = 'an internal error has occurred. please try later';
             var_dump($e);
           //header('Location: '.$data['base'].'register.php?error='.$error);
-      }
-  }
+        }
+    }
 
 
     function signup_end() {
